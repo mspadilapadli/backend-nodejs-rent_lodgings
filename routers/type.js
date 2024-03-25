@@ -1,21 +1,17 @@
 const express = require("express");
+const TypeController = require("../controllers/TypeController");
 const router = express.Router();
 
 // router.get("/", (req, res) => {
 //     res.send(`hello types`);
 // });
 
-// router.post("/");
-// router.get("/", async (req, res) => {
-//     try {
-//         const rooms = await Lodging.findAll();
-//         res.status(200).json(rooms);
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({ message: `Internal Server Error` });
-//     }
-// });
-// router.put("/:id");
-// router.delete("/:id");
+router.post("/", TypeController.postType);
+
+router.get("/", TypeController.getType);
+
+router.put("/:id", TypeController.putType);
+
+router.delete("/:id", TypeController.deleteType);
 
 module.exports = router;
