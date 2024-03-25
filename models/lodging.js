@@ -86,6 +86,11 @@ module.exports = (sequelize, DataTypes) => {
                     notNull: {
                         msg: `price is required`,
                     },
+                    min(value) {
+                        if (value <= 1500000) {
+                            throw new Error(`minimum price is 1500000`);
+                        }
+                    },
                 },
             },
             typeId: {
