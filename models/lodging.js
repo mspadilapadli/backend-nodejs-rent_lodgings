@@ -15,14 +15,103 @@ module.exports = (sequelize, DataTypes) => {
     }
     Lodging.init(
         {
-            name: DataTypes.STRING,
-            facility: DataTypes.TEXT,
-            roomCapacity: DataTypes.INTEGER,
-            imgUrl: DataTypes.STRING,
-            location: DataTypes.STRING,
-            price: DataTypes.INTEGER,
-            typeId: DataTypes.INTEGER,
-            authorId: DataTypes.INTEGER,
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `name is required`,
+                    },
+                    notNull: {
+                        msg: `name is required`,
+                    },
+                },
+            },
+            facility: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `facility is required`,
+                    },
+                    notNull: {
+                        msg: `facility is required`,
+                    },
+                },
+            },
+            roomCapacity: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `room capacity is required`,
+                    },
+                    notNull: {
+                        msg: `room capacity is required`,
+                    },
+                },
+            },
+            imgUrl: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `imgUrl is required`,
+                    },
+                    notNull: {
+                        msg: `imgUrl is required`,
+                    },
+                    isUrl: true,
+                },
+            },
+            location: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `location is required`,
+                    },
+                    notNull: {
+                        msg: `location is required`,
+                    },
+                },
+            },
+            price: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `price is required`,
+                    },
+                    notNull: {
+                        msg: `price is required`,
+                    },
+                },
+            },
+            typeId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `typeId is required`,
+                    },
+                    notNull: {
+                        msg: `typeId is required`,
+                    },
+                },
+            },
+            authorId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `authorId is required`,
+                    },
+                    notNull: {
+                        msg: `authorId is required`,
+                    },
+                },
+            },
         },
         {
             sequelize,
