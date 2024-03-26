@@ -37,8 +37,11 @@ class UserController {
             if (!user || !comparePass) throw { name: `InvalidUser` };
             // console.log(comparePass);
 
+            let token = createToken({ id: user.id });
+
             res.status(200).json({
                 message: `Login berhasil`,
+                access_token: token,
             });
         } catch (error) {
             // console.log(error.name);
