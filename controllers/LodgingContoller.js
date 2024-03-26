@@ -19,7 +19,7 @@ class LodgingController {
             res.status(500).json({ message: `Internal Server Error` });
         }
     }
-    static async getAllRooms(req, res) {
+    static async getAllRoomsUser(req, res) {
         try {
             const rooms = await Lodging.findAll({
                 include: {
@@ -29,6 +29,16 @@ class LodgingController {
                     },
                 },
             });
+            res.status(200).json(rooms);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: `Internal Server Error` });
+        }
+    }
+
+    static async getAllRooms(req, res) {
+        try {
+            const rooms = await Lodging.findAll();
             res.status(200).json(rooms);
         } catch (error) {
             console.log(error);

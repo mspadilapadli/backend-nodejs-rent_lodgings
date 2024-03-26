@@ -61,7 +61,10 @@ module.exports = (sequelize, DataTypes) => {
                     notNull: {
                         msg: `imgUrl is required`,
                     },
-                    isUrl: true,
+                    isUrl: {
+                        args: true,
+                        msg: `Please input url format`,
+                    },
                 },
             },
             location: {
@@ -86,11 +89,15 @@ module.exports = (sequelize, DataTypes) => {
                     notNull: {
                         msg: `price is required`,
                     },
-                    min(value) {
-                        if (value <= 1500000) {
-                            throw new Error(`minimum price is 1500000`);
-                        }
+                    min: {
+                        args: 1500000,
+                        msg: `Minimum price is 1500000`,
                     },
+                    // min(value) {
+                    //     if (value <= 1500000) {
+                    //         throw new Error(`minimum price is 1500000`);
+                    //     }
+                    // },
                 },
             },
             typeId: {

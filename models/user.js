@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { hashPassword } = require("../helpers/bcrypt");
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         /**
@@ -18,7 +19,10 @@ module.exports = (sequelize, DataTypes) => {
             email: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
+                unique: {
+                    args: true,
+                    message: `Email already exists`,
+                },
                 validate: {
                     notEmpty: {
                         msg: `email is required`,
@@ -26,17 +30,45 @@ module.exports = (sequelize, DataTypes) => {
                     notNull: {
                         msg: `email is required`,
                     },
-                    isEmail: true,
+                    isEmail: {
+                        args: true,
+                        msg: `Invalid email format`,
+                    },
                 },
             },
-            password: DataTypes.STRING,
-            role: DataTypes.STRING,
+            password: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: {
+                        msg: `password is required`,
+                    },
+                    notNull: {
+                        msg: `password is required`,
+                    },
+                    minLength(value) {
+                        if (value.length < 5) {
+                            throw new Error(`Minimum password character is 5`);
+                        }
+                    },
+                },
+            },
+            role: {
+                type: DataTypes.STRING,
+                defaultValue: `Staff`,
+            },
             phoneNumber: DataTypes.STRING,
             address: DataTypes.STRING,
         },
         {
             sequelize,
             modelName: "User",
+            hooks: {
+                beforeCreate(user, option) {
+                    console.log(user.password);
+                    user.password = hashPassword(user.password);
+                },
+            },
         }
     );
     return User;
