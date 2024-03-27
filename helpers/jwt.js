@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secret = `ANAK_PASID`;
+const secret = process.env.JWT_SECRET;
 
 let createToken = (payload) => {
     let token = jwt.sign(payload, secret);

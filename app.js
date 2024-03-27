@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { json } = require("sequelize");
 const app = express();

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { createToken, verifyToken } = require("./helpers/jwt");
 const { hashPassword, comparePassword } = require("./helpers/bcrypt");
 
@@ -14,7 +15,9 @@ let payload = verifyToken(token);
 
 let password = `abcda`;
 let hash = hashPassword(password);
-console.log(hash);
+// console.log(hash);
 
 let compare = comparePassword(`abcda`, hash);
-console.log(compare);
+// console.log(compare);
+
+console.log(process.env.JWT_SECRET);
