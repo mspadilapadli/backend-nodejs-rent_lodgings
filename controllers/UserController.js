@@ -5,14 +5,15 @@ const { User } = require("../models");
 class UserController {
     static async register(req, res, next) {
         try {
-            console.log(req.body);
+            // console.log(req.body);
             let user = await User.create(req.body);
             // console.log(user);
 
             res.status(201).json({ message: `${user.email} has been created` });
+            // res.status(201).json({ message: ` has been created` });
         } catch (error) {
+            console.log(error.name);
             next(error);
-            // console.log(error.name);
             // if (error.name === `SequelizeValidationError`) {
             //     return res
             //         .status(400)

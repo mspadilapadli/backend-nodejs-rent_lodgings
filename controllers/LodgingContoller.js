@@ -3,8 +3,8 @@ const { Lodging, User } = require("../models");
 class LodgingController {
     static async postRoom(req, res, next) {
         try {
-            console.log(req.user);
-            console.log(req.user);
+            // console.log(req.user);
+            // console.log(req.user);
             let {
                 name,
                 facility,
@@ -31,6 +31,7 @@ class LodgingController {
                 // message: `create success`,
             });
         } catch (error) {
+            console.log(error);
             next(error);
             // if (error.name === "SequelizeValidationError") {
             //     res.status(400).json({
