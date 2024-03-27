@@ -3,7 +3,7 @@ const { createToken } = require("../helpers/jwt");
 const { User } = require("../models");
 
 class UserController {
-    static async register(req, res) {
+    static async register(req, res, next) {
         try {
             console.log(req.body);
             let user = await User.create(req.body);
@@ -11,19 +11,20 @@ class UserController {
 
             res.status(201).json({ message: `${user.email} has been created` });
         } catch (error) {
+            next(error);
             // console.log(error.name);
-            if (error.name === `SequelizeValidationError`) {
-                return res
-                    .status(400)
-                    .json({ message: error.errors.map((e) => e.message) });
-            }
-            console.log(error);
-            res.status(500).json({ message: `Internal Server Error` });
+            // if (error.name === `SequelizeValidationError`) {
+            //     return res
+            //         .status(400)
+            //         .json({ message: error.errors.map((e) => e.message) });
+            // }
+            // // console.log(error);
+            // res.status(500).json({ message: `Internal Server Error` });
             // res.status(500).json(error);
         }
     }
 
-    static async login(req, res) {
+    static async login(req, res, next) {
         try {
             let { email, password } = req.body;
             if (!email || !password) throw { name: `InvalidInput` };
@@ -45,18 +46,19 @@ class UserController {
             });
         } catch (error) {
             // console.log(error.name);
-            if (error.name === `InvalidInput`) {
-                return res
-                    .status(400)
-                    .json({ message: `Email or Password is required` });
-            }
+            next(error);
+            // if (error.name === `InvalidInput`) {
+            //     return res
+            //         .status(400)
+            //         .json({ message: `Email or Password is required` });
+            // }
 
-            if (error.name === `InvalidUser`) {
-                return res
-                    .status(401)
-                    .json({ message: `Invalid email or password` });
-            }
-            res.status(500).json({ message: `Internal Server Error` });
+            // if (error.name === `InvalidUser`) {
+            //     return res
+            //         .status(401)
+            //         .json({ message: `Invalid email or password` });
+            // }
+            // res.status(500).json({ message: `Internal Server Error` });
             // console.log(error);
             // res.status(500).json(error);
         }
