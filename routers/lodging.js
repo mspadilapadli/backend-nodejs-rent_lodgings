@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const LodgingController = require("../controllers/lodgingContoller");
 const authentication = require("../middlewares/authenticate");
@@ -18,6 +21,14 @@ router.get("/pub", LodgingController.getAllRooms); //public
 router.get("/:id", authentication, LodgingController.getRoomById);
 
 router.put("/:id", authentication, authorization, LodgingController.putRoom);
+
+router.patch(
+    "/:id/imgUrl",
+    authentication,
+    authorization,
+    upload.single("imgUrl"),
+    LodgingController.patchImgUrl
+);
 
 router.delete(
     "/:id",
