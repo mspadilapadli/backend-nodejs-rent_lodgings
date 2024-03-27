@@ -3,7 +3,7 @@ const router = express.Router();
 
 const LodgingController = require("../controllers/lodgingContoller");
 const authentication = require("../middlewares/authenticate");
-const authorization = require("../middlewares/authorization");
+const { authorization } = require("../middlewares/authorization");
 
 // router.get("/", (req, res) => {
 //     res.send(`hello lodgings`);

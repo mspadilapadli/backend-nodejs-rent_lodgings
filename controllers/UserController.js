@@ -5,7 +5,7 @@ const { User } = require("../models");
 class UserController {
     static async register(req, res) {
         try {
-            // console.log(req.body);
+            console.log(req.body);
             let user = await User.create(req.body);
             // console.log(user);
 
@@ -17,8 +17,8 @@ class UserController {
                     .status(400)
                     .json({ message: error.errors.map((e) => e.message) });
             }
+            console.log(error);
             res.status(500).json({ message: `Internal Server Error` });
-            // console.log(error);
             // res.status(500).json(error);
         }
     }

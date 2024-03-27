@@ -3,7 +3,7 @@ const { User } = require("../models");
 
 const authentication = async (req, res, next) => {
     try {
-        console.log(req.headers.authorization);
+        // console.log(req.headers.authorization);
         let getToken = req.headers.authorization;
         if (!getToken) throw { name: `InvalidToken` };
 
@@ -17,7 +17,7 @@ const authentication = async (req, res, next) => {
         // console.log(user);
         if (!user) throw { name: `InvalidToken` };
 
-        req.user = { id: user.id };
+        req.user = { id: user.id, role: user.role };
 
         next();
     } catch (error) {

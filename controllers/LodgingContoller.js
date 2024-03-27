@@ -3,7 +3,7 @@ const { Lodging, User } = require("../models");
 class LodgingController {
     static async postRoom(req, res) {
         try {
-            // console.log(req.body);
+            console.log(req.user);
             console.log(req.user);
             let {
                 name,
@@ -27,6 +27,8 @@ class LodgingController {
             });
             res.status(201).json({
                 message: `new item ${rooms.name} created `,
+                rooms,
+                // message: `create success`,
             });
         } catch (error) {
             if (error.name === "SequelizeValidationError") {
@@ -114,12 +116,13 @@ class LodgingController {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
             if (!room) throw { name: "NotFound" };
-            // await Lodging.destroy({
-            //     where: { id },
-            // });
+            await Lodging.destroy({
+                where: { id },
+            });
 
             res.status(200).json({
-                message: `success to delete `,
+                message: `${room.name} success to delete `,
+                // message: `success to delete `,
             });
         } catch (error) {
             if (error.name === "NotFound") {
