@@ -1,7 +1,7 @@
 const { Lodging, User } = require("../models");
 
 class LodgingController {
-    static async postRoom(req, res) {
+    static async postRoom(req, res, next) {
         try {
             console.log(req.user);
             console.log(req.user);
@@ -31,17 +31,18 @@ class LodgingController {
                 // message: `create success`,
             });
         } catch (error) {
-            if (error.name === "SequelizeValidationError") {
-                res.status(400).json({
-                    message: error.errors.map((e) => e.message),
-                });
-                return;
-            }
-            console.log(error.name);
-            res.status(500).json({ message: `Internal Server Error` });
+            next(error);
+            // if (error.name === "SequelizeValidationError") {
+            //     res.status(400).json({
+            //         message: error.errors.map((e) => e.message),
+            //     });
+            //     return;
+            // }
+            // console.log(error.name);
+            // res.status(500).json({ message: `Internal Server Error` });
         }
     }
-    static async getAllRoomsUser(req, res) {
+    static async getAllRoomsUser(req, res, next) {
         try {
             const rooms = await Lodging.findAll({
                 include: {
@@ -53,8 +54,9 @@ class LodgingController {
             });
             res.status(200).json(rooms);
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: `Internal Server Error` });
+            next(error);
+            // console.log(error);
+            // res.status(500).json({ message: `Internal Server Error` });
         }
     }
 
@@ -67,7 +69,7 @@ class LodgingController {
             res.status(500).json({ message: `Internal Server Error` });
         }
     }
-    static async getRoomById(req, res) {
+    static async getRoomById(req, res, next) {
         try {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
@@ -78,15 +80,16 @@ class LodgingController {
 
             res.status(200).json(room);
         } catch (error) {
-            if (error.name === "NotFound") {
-                res.status(404).json({ massage: `room doesn't exists` });
-                return;
-            }
-            console.log(error);
-            res.status(500).json({ message: `Internal Server Error` });
+            next(error);
+            // if (error.name === "NotFound") {
+            //     res.status(404).json({ massage: `room doesn't exists` });
+            //     return;
+            // }
+            // console.log(error);
+            // res.status(500).json({ message: `Internal Server Error` });
         }
     }
-    static async putRoom(req, res) {
+    static async putRoom(req, res, next) {
         try {
             // console.log(req.body);
             // const {name,facility,roomCapacity,imgUrl,location,price,typeId,authorId} = req.body
@@ -99,19 +102,20 @@ class LodgingController {
 
             res.status(200).json({ message: `${room.name} has been updated ` });
         } catch (error) {
-            if (error.name === "SequelizeValidationError") {
-                res.status(400).json({
-                    message: error.errors.map((e) => e.message),
-                });
-            } else if (error.name === "NotFound") {
-                res.status(404).json({ massage: `room doesn't exists` });
-            } else {
-                console.log(error.name);
-                res.status(500).json({ message: `Internal Server Error` });
-            }
+            next(error);
+            //     if (error.name === "SequelizeValidationError") {
+            //         res.status(400).json({
+            //             message: error.errors.map((e) => e.message),
+            //         });
+            //     } else if (error.name === "NotFound") {
+            //         res.status(404).json({ massage: `room doesn't exists` });
+            //     } else {
+            //         console.log(error.name);
+            //         res.status(500).json({ message: `Internal Server Error` });
+            //     }
         }
     }
-    static async deleteRoom(req, res) {
+    static async deleteRoom(req, res, next) {
         try {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
@@ -125,12 +129,13 @@ class LodgingController {
                 // message: `success to delete `,
             });
         } catch (error) {
-            if (error.name === "NotFound") {
-                res.status(404).json({ massage: `room doesn't exists` });
-            } else {
-                console.log(error.name);
-                res.status(500).json({ message: `Internal Server Error` });
-            }
+            next(error);
+            // if (error.name === "NotFound") {
+            //     res.status(404).json({ massage: `room doesn't exists` });
+            // } else {
+            //     console.log(error.name);
+            //     res.status(500).json({ message: `Internal Server Error` });
+            // }
         }
     }
 }
