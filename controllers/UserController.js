@@ -53,7 +53,7 @@ class UserController {
 
             if (error.name === `InvalidUser`) {
                 return res
-                    .status(400)
+                    .status(401)
                     .json({ message: `Invalid email or password` });
             }
             res.status(500).json({ message: `Internal Server Error` });

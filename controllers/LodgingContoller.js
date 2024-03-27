@@ -4,7 +4,27 @@ class LodgingController {
     static async postRoom(req, res) {
         try {
             // console.log(req.body);
-            const rooms = await Lodging.create(req.body);
+            console.log(req.user);
+            let {
+                name,
+                facility,
+                roomCapacity,
+                imgUrl,
+                location,
+                price,
+                typeId,
+                authorId,
+            } = req.body;
+            const rooms = await Lodging.create({
+                name,
+                facility,
+                roomCapacity,
+                imgUrl,
+                location,
+                price,
+                typeId,
+                authorId: req.user.id,
+            });
             res.status(201).json({
                 message: `new item ${rooms.name} created `,
             });
@@ -94,12 +114,12 @@ class LodgingController {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
             if (!room) throw { name: "NotFound" };
-            await Lodging.destroy({
-                where: { id },
-            });
+            // await Lodging.destroy({
+            //     where: { id },
+            // });
 
             res.status(200).json({
-                message: `${room.name} success to delete `,
+                message: `success to delete `,
             });
         } catch (error) {
             if (error.name === "NotFound") {
