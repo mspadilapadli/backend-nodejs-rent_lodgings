@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Putra Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Putri Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 2
+    },
+    {
+        "name": "Violet Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 2
+    }
+]
