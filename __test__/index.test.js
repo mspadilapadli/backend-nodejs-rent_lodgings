@@ -26,19 +26,74 @@ beforeAll(async () => {
     }
 });
 
+//! === testing admin login ===
+
 describe("POST /login", () => {
+    //* a. berhasil login
     test(`Login Success`, async () => {
         const response = await request(app)
             .post(`/users/login`)
             .send({ email: `admin@gmail.com`, password: `12345` });
 
         const { body, status } = response;
-        console.log(body, "<<<<<<<<<body");
+        // console.log(body.access_token, "<<<<<<<<<body");
         access_token = body.access_token;
 
         expect(status).toBe(200);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty("access_token", expect.any(String));
+    });
+
+    //* b. Email tidak diberikan /diinput
+    test(`error email empty`, async () => {
+        const response = await request(app)
+            .post(`/users/login`)
+            .send({ email: "", password: `12345` });
+
+        const { body, status } = response;
+
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Email or Password is required");
+    });
+
+    //* c. Password tidak diberikan /diinput
+    test(`error password empty`, async () => {
+        const response = await request(app)
+            .post(`/users/login`)
+            .send({ email: `admin@gmail.com`, password: `` });
+
+        const { body, status } = response;
+
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Email or Password is required");
+    });
+
+    //* d. Email diberikan invalid/ tidak terdaftar
+    test(`error email invalid`, async () => {
+        const response = await request(app)
+            .post(`/users/login`)
+            .send({ email: "invalidAdmin@gmail.com", password: `12345` });
+
+        const { body, status } = response;
+
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Invalid email or password");
+    });
+
+    //* d. Password diberikan invalid/ tidak terdaftar
+    test(`error password invalid`, async () => {
+        const response = await request(app)
+            .post(`/users/login`)
+            .send({ email: "admin@gmail.com", password: `12345Inavlid` });
+
+        const { body, status } = response;
+
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Invalid email or password");
     });
 });
 
