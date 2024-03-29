@@ -14,7 +14,6 @@ class LodgingController {
                 location,
                 price,
                 typeId,
-                authorId,
             } = req.body;
             const rooms = await Lodging.create({
                 name,
@@ -77,9 +76,6 @@ class LodgingController {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
             if (!room) throw { name: "NotFound" };
-            await Lodging.update(req.body, {
-                where: { id },
-            });
 
             res.status(200).json(room);
         } catch (error) {
@@ -99,11 +95,14 @@ class LodgingController {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
             if (!room) throw { name: "NotFound" };
-            await Lodging.update(req.body, {
+            let updated = await Lodging.update(req.body, {
                 where: { id },
             });
 
-            res.status(200).json({ message: `${room.name} has been updated ` });
+            res.status(200).json({
+                message: `${room.name} has been updated `,
+                updated,
+            });
         } catch (error) {
             next(error);
 

@@ -33,10 +33,10 @@ class UserController {
             const user = await User.findOne({
                 where: { email },
             });
-
+            if (!user) throw { name: `InvalidUser` };
             // console.log(user);
             const comparePass = comparePassword(password, user.password);
-            if (!user || !comparePass) throw { name: `InvalidUser` };
+            if (!comparePass) throw { name: `InvalidUser` };
             // console.log(comparePass);
 
             let token = createToken({ id: user.id });

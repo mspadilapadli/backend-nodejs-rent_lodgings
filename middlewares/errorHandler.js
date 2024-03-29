@@ -12,7 +12,7 @@ function errorHandler(error, req, res, next) {
             break;
         case "NotFound":
             status = 404;
-            message = `room doesn't exists`;
+            message = `Data note found`;
             break;
         case "Forbidden":
             status = 403;
@@ -22,7 +22,7 @@ function errorHandler(error, req, res, next) {
             status = 401;
             message = `Unauthenticated`;
             break;
-        case "SequelizeValidationError" || `SequelizeUniqueConstraintError`:
+        case "SequelizeValidationError":
             status = 400;
             message = error.errors.map((e) => e.message);
             break;
