@@ -12,7 +12,7 @@ function errorHandler(error, req, res, next) {
             break;
         case "NotFound":
             status = 404;
-            message = `Data note found`;
+            message = `Data not found`;
             break;
         case "Forbidden":
             status = 403;

@@ -188,7 +188,8 @@ class LodgingController {
             });
 
             res.status(200).json({
-                message: `${room.name} success to delete `,
+                message: `${room.name} success to delete`,
+                room,
                 // message: `success to delete `,
             });
         } catch (error) {

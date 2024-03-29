@@ -591,7 +591,7 @@ describe(`PUT /lodgings/:id`, () => {
         // console.log(body, "<<<body");
         expect(status).toBe(404);
         expect(body).toBeInstanceOf(Object);
-        expect(body).toHaveProperty(`message`, `Data note found`);
+        expect(body).toHaveProperty(`message`, `Data not found`);
     });
     // * e. Gagal menjalankan fitur karena Staff mengelola data bukan miliknya
     test(`error staff unauthorized `, async () => {
@@ -611,7 +611,7 @@ describe(`PUT /lodgings/:id`, () => {
             .set("Authorization", `Bearer ` + access_token_staff);
 
         const { body, status } = response;
-        // console.log(body, "<<<body");
+        // console.log(body, "<<<body staff");
         expect(status).toBe(403);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty(`message`, `You're not Unauthorized`);
@@ -635,7 +635,7 @@ describe(`PUT /lodgings/:id`, () => {
             .set("Authorization", `Bearer ` + access_token);
 
         const { body, status } = response;
-        console.log(body, "<<<body");
+        // console.log(body, "<<<body");
         expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty(`message`, [
@@ -650,6 +650,67 @@ describe(`PUT /lodgings/:id`, () => {
     });
 });
 //! =============== testing Delete ==============================
+describe(`DELETE /lodgings/:id`, () => {
+    // * a. Berhasil delete entitas utama
+    test(`success delete data`, async () => {
+        const response = await request(app)
+            .delete(`/lodgings/1`)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(
+            `message`,
+            `${body.room.name} success to delete`
+        );
+    });
+    // * b. Gagal karena belum login
+    test(`error not login`, async () => {
+        const response = await request(app).delete(`/lodgings/1`);
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, "Unauthenticated");
+    });
+
+    // * c. Gagal karena Token tidak valid
+    test(`error token invalid`, async () => {
+        const response = await request(app)
+            .delete(`/lodgings/1`)
+            .set("Authorization", `BearerInvalid ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, "Unauthenticated");
+    });
+
+    // * d. Gagal karena id tidak valid
+    test(`error id invalid `, async () => {
+        const response = await request(app)
+            .delete(`/lodgings/100`)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(404);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `Data not found`);
+    });
+
+    // * d. Gagal ketika staff mengapus data yang bukan miliknya
+    test(`error staff unauthorized`, async () => {
+        const response = await request(app)
+            .delete(`/lodgings/2`)
+            .set("Authorization", `Bearer ` + access_token_staff);
+        const { body, status } = response;
+        // console.log(body, "<<<body staff delete");
+        expect(status).toBe(403);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, "You're not Unauthorized");
+    });
+});
 //! ==============================================================
 describe(`GEt /pub/lodgings`, () => {
     test(`success get /pub/lodgings`, async () => {
