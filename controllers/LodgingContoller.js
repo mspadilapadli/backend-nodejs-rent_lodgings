@@ -95,12 +95,14 @@ class LodgingController {
             const { id } = req.params;
             const room = await Lodging.findByPk(id);
             if (!room) throw { name: "NotFound" };
-            let updated = await Lodging.update(req.body, {
+            await Lodging.update(req.body, {
                 where: { id },
             });
+            let updated = await Lodging.findByPk(id);
+            // console.log(updated);
 
             res.status(200).json({
-                message: `${room.name} has been updated `,
+                message: `Data with id ${room.id} has been updated`,
                 updated,
             });
         } catch (error) {

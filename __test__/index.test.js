@@ -4,6 +4,7 @@ const { sequelize, Lodging, User } = require("../models");
 const { createToken } = require("../helpers/jwt");
 
 let access_token;
+let access_token_staff;
 beforeAll(async () => {
     try {
         const data = require("../data/lodgings.json");
@@ -18,8 +19,17 @@ beforeAll(async () => {
             phoneNumber: "081234567890",
             address: "Bekasi",
         });
+        const staff = await User.create({
+            username: "padila",
+            email: "padila@gmail.com",
+            password: "12345",
+            role: "Staff",
+            phoneNumber: "081234567890",
+            address: "Bekasi",
+        });
         // access_token = createToken(user.id);
         // console.log(access_token, "<<<<<accesstoken");
+
         await Lodging.bulkCreate(data);
     } catch (error) {
         console.log(error, "<<< before all");
@@ -38,6 +48,20 @@ describe("POST /login", () => {
         const { body, status } = response;
         // console.log(body.access_token, "<<<<<<<<<body");
         access_token = body.access_token;
+
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("access_token", expect.any(String));
+    });
+
+    test(`Login Success staff`, async () => {
+        const response = await request(app)
+            .post(`/users/login`)
+            .send({ email: `padila@gmail.com`, password: `12345` });
+
+        const { body, status } = response;
+        // console.log(body.access_token, "<<<<<<<<<body");
+        access_token_staff = body.access_token;
 
         expect(status).toBe(200);
         expect(body).toBeInstanceOf(Object);
@@ -226,7 +250,7 @@ describe(`POST /lodgings`, () => {
             .send(newData)
             .set("Authorization", `Bearer ` + access_token);
         const { body, status } = response;
-        console.log(body, "<<<<<< body");
+        // console.log(body, "<<<<<< body");
         expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty("message", ["facility is required"]);
@@ -335,7 +359,7 @@ describe(`POST /lodgings`, () => {
             .send(newData)
             .set("Authorization", `Bearer ` + access_token);
         const { body, status } = response;
-        console.log(body, "<<<<<< body");
+        // console.log(body, "<<<<<< body");
         expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty("message", [
@@ -424,7 +448,7 @@ describe(`POST /lodgings`, () => {
             .send(newData)
             .set("Authorization", `Bearer ` + access_token);
         const { body, status } = response;
-        console.log(body, "<<<<<< body");
+        // console.log(body, "<<<<<< body");
         expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty("message", [`Minimum price is 1500000`]);
@@ -466,7 +490,7 @@ describe(`POST /lodgings`, () => {
             .send(newData)
             .set("Authorization", `Bearer ` + access_token);
         const { body, status } = response;
-        console.log(body, "<<<<<< body");
+        // console.log(body, "<<<<<< body");
         expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
         expect(body).toHaveProperty("message", [`typeId is required`]);
@@ -474,7 +498,158 @@ describe(`POST /lodgings`, () => {
 });
 
 //! ================= testing update =============================
+describe(`PUT /lodgings/:id`, () => {
+    // * a. Berhasil update entitas utama
+    test(`success update data`, async () => {
+        let updateData = {
+            name: "update Kost",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
 
+        const response = await request(app)
+            .put(`/lodgings/1`)
+            .send(updateData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(
+            `message`,
+            `Data with id ${body.updated.id} has been updated`
+        );
+    });
+
+    // * b.Gagal menjalankan fitur karena belum login
+    test(`error not login `, async () => {
+        let updateData = {
+            name: "update Kost",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app).put(`/lodgings/1`).send(updateData);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `Unauthenticated`);
+    });
+
+    // * c. Gagal menjalankan fitur karena token invalid
+    test(`error token invalid `, async () => {
+        let updateData = {
+            name: "update Kost",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .put(`/lodgings/1`)
+            .send(updateData)
+            .set("Authorization", `BearerInvalid ` + access_token);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `Unauthenticated`);
+    });
+
+    // * d. Gagal menjalankan fitur id tidak ada dialam db
+    test(`error id not found `, async () => {
+        let updateData = {
+            name: "update Kost",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .put(`/lodgings/120`)
+            .send(updateData)
+            .set("Authorization", `Bearer ` + access_token);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(404);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `Data note found`);
+    });
+    // * e. Gagal menjalankan fitur karena Staff mengelola data bukan miliknya
+    test(`error staff unauthorized `, async () => {
+        let updateData = {
+            name: "update Kost",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .put(`/lodgings/1`)
+            .send(updateData)
+            .set("Authorization", `Bearer ` + access_token_staff);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(403);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `You're not Unauthorized`);
+    });
+
+    // * d. Gagal ketika requst body tidak sesui (validation require)
+    test(`error req body valdiation `, async () => {
+        let updateData = {
+            name: "",
+            facility: "",
+            roomCapacity: 0,
+            imgUrl: "",
+            location: "",
+            price: 0,
+            typeId: "",
+        };
+
+        const response = await request(app)
+            .put(`/lodgings/1`)
+            .send(updateData)
+            .set("Authorization", `Bearer ` + access_token);
+
+        const { body, status } = response;
+        console.log(body, "<<<body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, [
+            "name is required",
+            "facility is required",
+            "imgUrl is required",
+            "Please input url format",
+            "location is required",
+            "Minimum price is 1500000",
+            "typeId is required",
+        ]);
+    });
+});
+//! =============== testing Delete ==============================
 //! ==============================================================
 describe(`GEt /pub/lodgings`, () => {
     test(`success get /pub/lodgings`, async () => {
