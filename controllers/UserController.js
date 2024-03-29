@@ -42,7 +42,7 @@ class UserController {
             let token = createToken({ id: user.id });
 
             res.status(200).json({
-                message: `Login berhasil`,
+                // message: `Login berhasil`,
                 access_token: token,
             });
         } catch (error) {

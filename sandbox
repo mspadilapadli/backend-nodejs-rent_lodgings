@@ -1,0 +1,7 @@
+const penjumlahan = require("./sandbox");
+
+test(`ini testing penjulahan a to b`, () => {
+    expect(penjumlahan(1, 3)).toBe(4);
+    expect(penjumlahan(2, 3)).toBe(5);
+    expect(penjumlahan(1, 32)).toBe(4);
+});
