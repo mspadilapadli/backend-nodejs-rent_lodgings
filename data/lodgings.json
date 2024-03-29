@@ -17,7 +17,7 @@
         "location": "Jakarta Selatan",
         "price": 2800000,
         "typeId": 2,
-        "authorId": 2
+        "authorId": 1
     },
     {
         "name": "Violet Kost",
@@ -27,6 +27,6 @@
         "location": "Jakarta Selatan",
         "price": 3500000,
         "typeId": 3,
-        "authorId": 2
+        "authorId": 1
     }
 ]

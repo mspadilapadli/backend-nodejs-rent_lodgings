@@ -1,16 +1,8 @@
 [
     {
-        "username": "padila",
-        "email": "padila@gmail.com",
-        "password": 12345,
-        "role": "admin",
-        "phoneNumber": "081234567890",
-        "address": "Payanggar"
-    },
-    {
         "username": "admin",
         "email": "admin@gmail.com",
-        "password": 12345,
+        "password": "12345",
         "role": "admin",
         "phoneNumber": "081234567890",
         "address": "Bekasi"

@@ -5,14 +5,15 @@ const { User } = require("../models");
 class UserController {
     static async register(req, res, next) {
         try {
-            console.log(req.body);
+            // console.log(req.body);
             let user = await User.create(req.body);
             // console.log(user);
 
             res.status(201).json({ message: `${user.email} has been created` });
+            // res.status(201).json({ message: ` has been created` });
         } catch (error) {
+            console.log(error.name);
             next(error);
-            // console.log(error.name);
             // if (error.name === `SequelizeValidationError`) {
             //     return res
             //         .status(400)
@@ -32,16 +33,16 @@ class UserController {
             const user = await User.findOne({
                 where: { email },
             });
-
+            if (!user) throw { name: `InvalidUser` };
             // console.log(user);
             const comparePass = comparePassword(password, user.password);
-            if (!user || !comparePass) throw { name: `InvalidUser` };
+            if (!comparePass) throw { name: `InvalidUser` };
             // console.log(comparePass);
 
             let token = createToken({ id: user.id });
 
             res.status(200).json({
-                message: `Login berhasil`,
+                // message: `Login berhasil`,
                 access_token: token,
             });
         } catch (error) {

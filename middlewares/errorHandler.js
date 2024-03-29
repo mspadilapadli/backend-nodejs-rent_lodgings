@@ -7,14 +7,26 @@ function errorHandler(error, req, res, next) {
             message = `Email or Password is required`;
             break;
         case "InvalidUser":
-            status = 400;
+            status = 401;
             message = `Invalid email or password`;
             break;
         case "NotFound":
             status = 404;
-            message = `room doesn't exists`;
+            message = `Data not found`;
+            break;
+        case "Forbidden":
+            status = 403;
+            message = `You're not Unauthorized`;
+            break;
+        case "InvalidToken":
+            status = 401;
+            message = `Unauthenticated`;
             break;
         case "SequelizeValidationError":
+            status = 400;
+            message = error.errors.map((e) => e.message);
+            break;
+        case "SequelizeUniqueConstraintError":
             status = 400;
             message = error.errors.map((e) => e.message);
             break;

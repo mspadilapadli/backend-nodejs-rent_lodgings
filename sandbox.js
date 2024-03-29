@@ -21,3 +21,9 @@ let compare = comparePassword(`abcda`, hash);
 // console.log(compare);
 
 console.log(process.env.JWT_SECRET);
+
+let penjumlahan = (a, b) => {
+    console.log(`masuk`);
+    return a + b;
+};
+module.exports = penjumlahan;

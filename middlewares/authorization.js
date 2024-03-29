@@ -14,14 +14,15 @@ const authorization = async (req, res, next) => {
             next();
         }
     } catch (error) {
-        if (error.name === "NotFound") {
-            return res.status(404).json({ massage: `room doesn't exists` });
-        }
-        if (error.name === "Forbidden") {
-            return res.status(403).json({ massage: `You're not Unauthorized` });
-        }
-        console.log(error.name);
-        res.status(500).json({ message: `Internal Server Error` });
+        next(error);
+        //     if (error.name === "NotFound") {
+        //         return res.status(404).json({ massage: `room doesn't exists` });
+        //     }
+        //     if (error.name === "Forbidden") {
+        //         return res.status(403).json({ massage: `You're not Unauthorized` });
+        //     }
+        //     console.log(error.name);
+        //     res.status(500).json({ message: `Internal Server Error` });
     }
 };
 
@@ -32,11 +33,12 @@ const adminAuthorize = async (req, res, next) => {
             next();
         } else throw { name: `Forbidden` };
     } catch (error) {
-        if (error.name === "Forbidden") {
-            return res.status(403).json({ massage: `You're not Unauthorized` });
-        }
-        console.log(error.name);
-        res.status(500).json({ message: `Internal Server Error` });
+        next(error);
+        // if (error.name === "Forbidden") {
+        //     return res.status(403).json({ massage: `You're not Unauthorized` });
+        // }
+        // console.log(error.name);
+        // res.status(500).json({ message: `Internal Server Error` });
     }
 };
 

@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const LodgingController = require("../controllers/lodgingContoller");
 const authentication = require("../middlewares/authenticate");
@@ -8,24 +11,26 @@ const { authorization } = require("../middlewares/authorization");
 // router.get("/", (req, res) => {
 //     res.send(`hello lodgings`);
 // });
+router.get("/lodgings", LodgingController.getAllRooms); //public
+router.get("/lodgings/:id", LodgingController.getRoomById); //public
 
-router.post("/", authentication, LodgingController.postRoom);
+router.use(authentication);
 
-router.get("/", authentication, LodgingController.getAllRoomsUser);
+router.post("/", LodgingController.postRoom);
 
-router.get("/pub", LodgingController.getAllRooms); //public
+router.get("/", LodgingController.getAllRoomsUser);
 
-router.get("/:id", authentication, LodgingController.getRoomById);
+router.get("/:id", LodgingController.getRoomById);
 
-router.put("/:id", authentication, authorization, LodgingController.putRoom);
+router.put("/:id", authorization, LodgingController.putRoom);
 
-router.delete(
-    "/:id",
-    authentication,
+router.patch(
+    "/:id/imgUrl",
     authorization,
-    LodgingController.deleteRoom
+    upload.single("imgUrl"),
+    LodgingController.patchImgUrl
 );
 
-router.get("/:id/pub", LodgingController.getRoomById); //public
+router.delete("/:id", authorization, LodgingController.deleteRoom);
 
 module.exports = router;
