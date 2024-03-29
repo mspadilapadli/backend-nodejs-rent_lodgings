@@ -26,7 +26,7 @@ beforeAll(async () => {
     }
 });
 
-//! === testing admin login ===
+//! ================= testing admin login ============================
 
 describe("POST /login", () => {
     //* a. berhasil login
@@ -48,7 +48,7 @@ describe("POST /login", () => {
     test(`error email empty`, async () => {
         const response = await request(app)
             .post(`/users/login`)
-            .send({ email: "", password: `12345` });
+            .send({ password: `12345` });
 
         const { body, status } = response;
 
@@ -61,7 +61,7 @@ describe("POST /login", () => {
     test(`error password empty`, async () => {
         const response = await request(app)
             .post(`/users/login`)
-            .send({ email: `admin@gmail.com`, password: `` });
+            .send({ email: `admin@gmail.com` });
 
         const { body, status } = response;
 
@@ -97,8 +97,9 @@ describe("POST /login", () => {
     });
 });
 
-//! === testing create ===
+//! ================= testing create ============================
 describe(`POST /lodgings`, () => {
+    // * a. Berhasil membuat entitas utama
     test(`success create data`, async () => {
         let newData = {
             name: "New Kost add testing",
@@ -108,7 +109,116 @@ describe(`POST /lodgings`, () => {
             location: "Jakarta Selatan",
             price: 3500000,
             typeId: 3,
-            authorId: 1,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(201);
+        expect(body).toBeInstanceOf(Object);
+        expect(body.rooms).toHaveProperty("id", 4);
+    });
+
+    // * b. Gagal menjalankan fitur karena belum login
+    test(`error not login`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app).post(`/lodgings`).send(newData);
+
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Unauthenticated");
+    });
+
+    // * c. Gagal menjalankan fitur karena token tidak valid
+    test(`error token Invalid`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `BearerInvalid ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(401);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", "Unauthenticated");
+    });
+
+    // * d. Gagal ketika requst body tidak sesui (validation require)
+    test(`req body name is null`, async () => {
+        let newData = {
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["name is required"]);
+    });
+
+    test(`req body name empty string`, async () => {
+        let newData = {
+            name: "",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["name is required"]);
+    });
+
+    // ==============================================
+    test(`req body facility is null`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
         };
 
         const response = await request(app)
@@ -117,12 +227,255 @@ describe(`POST /lodgings`, () => {
             .set("Authorization", `Bearer ` + access_token);
         const { body, status } = response;
         console.log(body, "<<<<<< body");
-        expect(status).toBe(201);
+        expect(status).toBe(400);
         expect(body).toBeInstanceOf(Object);
-        expect(body.rooms).toHaveProperty("id", 4);
+        expect(body).toHaveProperty("message", ["facility is required"]);
+    });
+
+    test(`req body facility empty string`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["facility is required"]);
+    });
+    // ================================================================
+
+    test(`req body room capacity is null`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["room capacity is required"]);
+    });
+
+    test(`req body room capacity empty string`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: "",
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["room capacity is required"]);
+    });
+    //  ==============================================================
+
+    test(`req body imgUrl is null`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["imgUrl is required"]);
+    });
+    test(`req body imgUrl is empty and not url format`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", [
+            "imgUrl is required",
+            "Please input url format",
+        ]);
+    });
+    // ==========================================================
+    test(`req body location is null `, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["location is required"]);
+    });
+    test(`req body location empty string`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "",
+            price: 3500000,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["location is required"]);
+    });
+    // ==================================================
+    test(`req body price is null`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["price is required"]);
+    });
+    test(`req body price is empty`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 0,
+            typeId: 3,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", [`Minimum price is 1500000`]);
+    });
+    // =========================================================
+    test(`req body TypeId is null`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        // console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", ["typeId is required"]);
+    });
+    test(`req body TypeId is empty`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: "",
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        console.log(body, "<<<<<< body");
+        expect(status).toBe(400);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("message", [`typeId is required`]);
     });
 });
 
+//! ================= testing update =============================
+
+//! ==============================================================
 describe(`GEt /pub/lodgings`, () => {
     test(`success get /pub/lodgings`, async () => {
         const response = await request(app).get(`/pub/lodgings`);
