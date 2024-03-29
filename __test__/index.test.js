@@ -97,6 +97,32 @@ describe("POST /login", () => {
     });
 });
 
+//! === testing create ===
+describe(`POST /lodgings`, () => {
+    test(`success create data`, async () => {
+        let newData = {
+            name: "New Kost add testing",
+            facility: "Kasur Twin bad, AC, Toilet dalam, dapur",
+            roomCapacity: 3,
+            imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+            location: "Jakarta Selatan",
+            price: 3500000,
+            typeId: 3,
+            authorId: 1,
+        };
+
+        const response = await request(app)
+            .post(`/lodgings`)
+            .send(newData)
+            .set("Authorization", `Bearer ` + access_token);
+        const { body, status } = response;
+        console.log(body, "<<<<<< body");
+        expect(status).toBe(201);
+        expect(body).toBeInstanceOf(Object);
+        expect(body.rooms).toHaveProperty("id", 4);
+    });
+});
+
 describe(`GEt /pub/lodgings`, () => {
     test(`success get /pub/lodgings`, async () => {
         const response = await request(app).get(`/pub/lodgings`);
