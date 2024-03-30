@@ -143,7 +143,7 @@ describe(`POST /lodgings`, () => {
         // console.log(body, "<<<<<< body");
         expect(status).toBe(201);
         expect(body).toBeInstanceOf(Object);
-        expect(body.rooms).toHaveProperty("id", 4);
+        expect(body.rooms).toHaveProperty("id", 21);
     });
 
     // * b. Gagal menjalankan fitur karena belum login

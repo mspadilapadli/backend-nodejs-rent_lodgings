@@ -28,5 +28,175 @@
         "price": 3500000,
         "typeId": 3,
         "authorId": 1
+    },
+    {
+        "name": "D' Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Guede Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Keta Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 1
+    },
+    {
+        "name": "Martabe Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Matata Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 1
+    },
+    {
+        "name": "Marsada Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Batak's Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Mandiri Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Marhottang Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 1
+    },
+    {
+        "name": "Ketabo Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Ketale Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Mardongan Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Rap-rap Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 1
+    },
+    {
+        "name": "Bagas Godang Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
+    },
+    {
+        "name": "Panyanggar Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur",
+        "roomCapacity": 2,
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEGXBYu21sPbZtg8KgN1b_S3yz5TyeBE86jQ&usqp=CAU",
+        "location": "Jakarta Selatan",
+        "price": 2800000,
+        "typeId": 2,
+        "authorId": 1
+    },
+    {
+        "name": "Sadabuan Kost",
+        "facility": "Kasur, Kipas, Toilet dalam",
+        "roomCapacity": 1,
+        "imgUrl": "https://infokost.id/wp-content/uploads/2023/03/PXL_20230313_070522622-scaled.jpg",
+        "location": "Jakarta Selatan",
+        "price": 2000000,
+        "typeId": 1,
+        "authorId": 1
+    },
+    {
+        "name": "Kayombun Kost",
+        "facility": "Kasur Twin bad, AC, Toilet dalam, dapur, rooftop",
+        "roomCapacity": 4,
+        "imgUrl": "https://www.yogyes.com/id/yogyakarta-hotel/guest-house/pavilo/1.jpg",
+        "location": "Jakarta Selatan",
+        "price": 3500000,
+        "typeId": 3,
+        "authorId": 1
     }
 ]

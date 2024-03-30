@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const cloudinary = require("../helpers/cloudinary");
 const { Lodging, User } = require("../models");
 const axios = require("axios");
@@ -64,7 +65,28 @@ class LodgingController {
 
     static async getAllRooms(req, res) {
         try {
-            const rooms = await Lodging.findAll();
+            const { search, sort } = req.query;
+            // console.log(search, "<<<search");
+            let option = {};
+
+            // * search
+            if (search) {
+                option.where = {
+                    name: {
+                        [Op.iLike]: `%${search}%`,
+                    },
+                };
+            }
+            // console.log(option, "<<<option");
+
+            //* sorting
+            if (sort) {
+                const ordering = sort[0] === "-" ? `DESC` : `ASC`;
+                const orderByColom = ordering === `DESC` ? sort.slice(1) : sort;
+                option.order = [[orderByColom, ordering]];
+            }
+
+            const rooms = await Lodging.findAll(option);
             res.status(200).json(rooms);
         } catch (error) {
             console.log(error);
