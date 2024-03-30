@@ -38,9 +38,10 @@ class TypeController {
             const { id } = req.params;
             const type = await Type.findByPk(id);
             if (!type) throw { name: "NotFound" };
-            let updated = await Type.update(req.body, {
+            await Type.update(req.body, {
                 where: { id },
             });
+            let updated = await Type.findByPk(id);
 
             res.status(200).json({
                 message: `${type.name} has been updated `,

@@ -143,7 +143,7 @@ describe(`POST /lodgings`, () => {
         // console.log(body, "<<<<<< body");
         expect(status).toBe(201);
         expect(body).toBeInstanceOf(Object);
-        expect(body.rooms).toHaveProperty("id", 4);
+        expect(body.rooms).toHaveProperty("id", 21);
     });
 
     // * b. Gagal menjalankan fitur karena belum login
@@ -711,15 +711,77 @@ describe(`DELETE /lodgings/:id`, () => {
         expect(body).toHaveProperty(`message`, "You're not Unauthorized");
     });
 });
-//! ==============================================================
+//! ==================== pub/lodgings =====================================
 describe(`GEt /pub/lodgings`, () => {
     test(`success get /pub/lodgings`, async () => {
         const response = await request(app).get(`/pub/lodgings`);
 
         const { body, status } = response;
+        // console.log(body, "<<< all data lodgings");
         expect(status).toBe(200);
         expect(body).toBeInstanceOf(Array);
         expect(body[0]).toBeInstanceOf(Object);
+
+        // console.log(response, "<<<<");
+    });
+    test(`success get /pub/lodgings?filter`, async () => {
+        const response = await request(app).get(`/pub/lodgings?filter=3`);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Array);
+        expect(body[0]).toBeInstanceOf(Object);
+
+        // console.log(response, "<<<<");
+    });
+    test(`success get /pub/lodgings?search`, async () => {
+        const response = await request(app).get(`/pub/lodgings?search=keta`);
+
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Array);
+        expect(body[0]).toBeInstanceOf(Object);
+
+        // console.log(response, "<<<<");
+    });
+    test(`success get /pub/lodgings?page`, async () => {
+        const response = await request(app).get(
+            `/pub/lodgings?page[size]=10&page[number]=1`
+        );
+
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toBeInstanceOf(Array);
+        expect(body[0]).toBeInstanceOf(Object);
+
+        // console.log(response, "<<<<");
+    });
+});
+
+//! ==================== pub/lodgings/:id ================================
+
+describe(`GEt /pub/lodgings/:id`, () => {
+    test(`success get /pub/lodgings/:id`, async () => {
+        const response = await request(app).get(`/pub/lodgings/5`);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(200);
+        // expect(body).toBeInstanceOf(Array);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("id", 5);
+
+        // console.log(response, "<<<<");
+    });
+    test(`error id invalid`, async () => {
+        const response = await request(app).get(`/pub/lodgings/100`);
+
+        const { body, status } = response;
+        // console.log(body, "<<<body");
+        expect(status).toBe(404);
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty(`message`, `Data not found`);
 
         // console.log(response, "<<<<");
     });
@@ -732,12 +794,17 @@ afterAll(async () => {
             cascade: true,
             restartIdentity: true,
         });
-        Lodging.destroy({
-            where: {},
+        await sequelize.queryInterface.bulkDelete("Lodgings", null, {
             truncate: true,
             cascade: true,
             restartIdentity: true,
         });
+        // Lodging.destroy({
+        //     where: {},
+        //     truncate: true,
+        //     cascade: true,
+        //     restartIdentity: true,
+        // });
         // User.destroy({
         //     where: {},
         //     restartIdentity: true,
