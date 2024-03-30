@@ -727,6 +727,44 @@ _Response (401 - Unauthorized)_
 
 &nbsp;
 
+## 14. PATCH /lodgings/:id/imgUrl
+
+Request:
+
+-   headers:
+
+```json
+{
+    "Authorization": "Bearer <access_token>"
+}
+```
+
+-   file:
+
+```json
+{
+    "imgUrl": "<image/*>"
+}
+```
+
+_Response (201 - Created)_
+
+```json
+{
+    "message": "Image Putra Kost edited has been updated "
+}
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
+
+&nbsp;
+
 ## Global Error
 
 _Response (401 - Unauthorized)_
