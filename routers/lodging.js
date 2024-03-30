@@ -4,7 +4,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const LodgingController = require("../controllers/lodgingContoller");
+const LodgingController = require("../controllers/LodgingContoller");
 const authentication = require("../middlewares/authenticate");
 const { authorization } = require("../middlewares/authorization");
 
