@@ -65,19 +65,35 @@ class LodgingController {
 
     static async getAllRooms(req, res) {
         try {
-            const { search, sort } = req.query;
+            const { search, filter, sort, page } = req.query;
             // console.log(search, "<<<search");
             let option = {};
+            option.where = {};
 
             // * search
             if (search) {
-                option.where = {
-                    name: {
-                        [Op.iLike]: `%${search}%`,
-                    },
+                option.where.name = {
+                    [Op.iLike]: `%${search}%`,
                 };
             }
+            // // * search
+            // if (search) {
+            //     option.where = {
+            //         name: {
+            //             [Op.iLike]: `%${search}%`,
+            //         },
+            //     };
+            // }
             // console.log(option, "<<<option");
+            // * Filtering
+            if (filter) {
+                option.where.typeId = filter;
+            }
+            // if (filter) {
+            //     option.where = {
+            //         typeId: filter,
+            //     };
+            // }
 
             //* sorting
             if (sort) {
@@ -86,8 +102,37 @@ class LodgingController {
                 option.order = [[orderByColom, ordering]];
             }
 
+            // *pagination
+            // console.log(page, "<<page");
+            let limit = 10;
+            let pageNumber = 1;
+            if (page) {
+                if (page.size) {
+                    limit = page.size;
+                    option.limit = limit;
+                } else {
+                    option.limit = limit;
+                }
+                if (page.number) {
+                    pageNumber = page.number;
+                    option.offset = limit * (pageNumber - 1);
+                }
+            }
+            // console.log(option.limit, "<<default limit");
+            console.log(option, "<<option ");
+
             const rooms = await Lodging.findAll(option);
             res.status(200).json(rooms);
+
+            // * meta data
+            // const { count, rows } = await Lodging.findAndCountAll(option);
+            // res.json({
+            //     page: pageNumber,
+            //     data: rows,
+            //     totalData: count,
+            //     totalPage: Math.ceil(count / limit),
+            //     dataPerPage: limit,
+            // });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: `Internal Server Error` });
