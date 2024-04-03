@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
-const { sequelize, Lodging, User } = require("../models");
+const { sequelize, Lodging, User, Type } = require("../models");
 const { createToken } = require("../helpers/jwt");
 
 let access_token;
@@ -8,6 +8,9 @@ let access_token_staff;
 beforeAll(async () => {
     try {
         const data = require("../data/lodgings.json");
+        const dataType = require("../data/types.json");
+        await Type.bulkCreate(dataType);
+
         // const dataUser = require("../data/admin.json");
         // const user =  await User.bulkCreate(data);
 
@@ -789,26 +792,33 @@ describe(`GEt /pub/lodgings/:id`, () => {
 
 afterAll(async () => {
     try {
-        await sequelize.queryInterface.bulkDelete("Users", null, {
-            truncate: true,
-            cascade: true,
-            restartIdentity: true,
-        });
-        await sequelize.queryInterface.bulkDelete("Lodgings", null, {
-            truncate: true,
-            cascade: true,
-            restartIdentity: true,
-        });
-        // Lodging.destroy({
-        //     where: {},
+        // await sequelize.queryInterface.bulkDelete("Users", null, {
         //     truncate: true,
         //     cascade: true,
         //     restartIdentity: true,
         // });
-        // User.destroy({
-        //     where: {},
+        // await sequelize.queryInterface.bulkDelete("Types", null, {
+        //     truncate: true,
+        //     cascade: true,
         //     restartIdentity: true,
         // });
+        // await sequelize.queryInterface.bulkDelete("Lodgings", null, {
+        //     truncate: true,
+        //     cascade: true,
+        //     restartIdentity: true,
+        // });
+        await Type.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+            restartIdentity: true,
+        });
+        await User.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+            restartIdentity: true,
+        });
     } catch (error) {
         console.log(error, "<<<< afterAll");
     }
