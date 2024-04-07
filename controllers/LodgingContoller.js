@@ -121,18 +121,19 @@ class LodgingController {
             // console.log(option.limit, "<<default limit");
             console.log(option, "<<option ");
 
-            const rooms = await Lodging.findAll(option);
-            res.status(200).json(rooms);
+            // const rooms = await Lodging.findAll(option);
+            //   res.status(200).json(rooms);
 
             // * meta data
-            // const { count, rows } = await Lodging.findAndCountAll(option);
-            // res.json({
-            //     page: pageNumber,
-            //     data: rows,
-            //     totalData: count,
-            //     totalPage: Math.ceil(count / limit),
-            //     dataPerPage: limit,
-            // });
+            const { count, rows } = await Lodging.findAndCountAll(option);
+            res.status(200).json({
+                page: pageNumber,
+                data: rows,
+                totalData: count,
+                totalPage: Math.ceil(count / limit),
+                dataPerPage: limit,
+            });
+            // res.status(200).json(rooms);
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: `Internal Server Error` });
